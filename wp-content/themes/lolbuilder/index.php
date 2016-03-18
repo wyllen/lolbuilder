@@ -157,11 +157,26 @@ foreach ($items->data as $itemID => $item) {
                 'post_type'    => 'item',
                 'post_excerpt' => $item->plaintext,
             ));
-        add_post_meta($itemPostID, 'item_id', $itemID);
-        add_post_meta($item->into, 'used_to_craft', $itemID);
-        add_post_meta($item->from, 'crafted_with', $itemID);
-        add_post_meta($item->gold->base, 'gold_base', $itemID);
-        add_post_meta($item->gold->total, 'gold_total', $itemID);
-        add_post_meta($item->depth, 'depth', $itemID);
+        update_field('item_id', $itemID, $itemPostID);
+        update_field('used_to_craft', $item->into, $itemPostID);
+        update_field('crafted_with', $item->from, $itemPostID);
+        update_field('gold_base', $item->gold->base, $itemPostID);
+        update_field('gold_total', $item->gold->total, $itemPostID);
+        update_field('depth', $item->depth, $itemPostID);
+
+    }else{
+        $itemPostID = $itemPost->ID;
+        update_field('item_id', $itemID, $itemPostID);
+        update_field('used_to_craft', $item->into, $itemPostID);
+        update_field('crafted_with', $item->from, $itemPostID);
+        update_field('gold_base', $item->gold->base, $itemPostID);
+        update_field('gold_total', $item->gold->total, $itemPostID);
+        update_field('depth', $item->depth, $itemPostID);
+        $itemStats = get_object_vars($item->stats);
+        foreach ($itemStats as $stat => $statValue) {
+            var_dump($stat);
+            var_dump($statValue);
+            update_field($stat, $statValue, $itemPostID);            
+        }
     }
 }
