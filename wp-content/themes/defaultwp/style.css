@@ -1,0 +1,175 @@
+/*
+Theme Name: defaultwp
+Description: Thème parent
+Author: Vincent DURAND
+Version: 1.0
+*/
+
+/* CSS à inclure dans le thème enfant :
+		@import url("../defaultwp/style.css");
+*/
+
+
+/**
+ * Styles MCE
+ */
+
+.alignleft {
+	float: left;
+	margin: 6px 28px 28px 0;
+}
+
+.alignright {
+	float: right;
+	margin: 6px 0 28px 28px;
+}
+
+.aligncenter {
+	clear: both;
+	display: block;
+	margin: 0 auto 28px;
+}
+
+.wp-caption {
+	background: transparent;
+	border: none;
+	margin-bottom: 28px;
+	max-width: 100%;
+	padding: 0;
+	text-align: inherit;
+}
+
+.wp-caption-text,
+.wp-caption-dd {
+	color: #686868;
+	font-size: 13px;
+	font-style: italic;
+	line-height: 1.6153846154;
+	padding-top: 7px;
+}
+
+.mce-content-body .wpview-wrap {
+	margin-bottom: 28px;
+}
+
+.gallery {
+	margin: 0 -1.1666667%;
+	padding: 0;
+}
+
+.gallery .gallery-item {
+	display: inline-block;
+	max-width: 33.33%;
+	padding: 0 1.1400652% 2.2801304%;
+	text-align: center;
+	vertical-align: top;
+	width: 100%;
+}
+
+.gallery-columns-1 .gallery-item {
+	max-width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+	max-width: 50%;
+}
+
+.gallery-columns-4 .gallery-item {
+	max-width: 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+	max-width: 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+	max-width: 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+	max-width: 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+	max-width: 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+	max-width: 11.11%;
+}
+
+.gallery .gallery-caption {
+	font-size: 13px;
+	margin: 0;
+}
+
+.gallery-columns-6 .gallery-caption,
+.gallery-columns-7 .gallery-caption,
+.gallery-columns-8 .gallery-caption,
+.gallery-columns-9 .gallery-caption {
+	display: none;
+}
+
+.wp-audio-shortcode a,
+.wp-playlist a {
+	box-shadow: none;
+}
+
+.mce-content-body .wp-audio-playlist {
+	margin: 0;
+	padding-bottom: 0;
+}
+
+.mce-content-body .wp-playlist-tracks {
+	margin-top: 0;
+}
+
+.mce-content-body  .wp-playlist-item {
+	padding: 10px 0;
+}
+
+.mce-content-body .wp-playlist-item-length {
+	top: 10px;
+}
+
+
+/**
+ * Pagination
+ */
+
+.pagination {
+clear:both;
+padding:20px 0;
+position:relative;
+font-size:11px;
+line-height:13px;
+}
+ 
+.pagination span, .pagination a {
+display: inline-block;
+margin: 2px 2px 2px 0;
+padding: 6px 9px 5px 9px;
+text-decoration: none;
+width: auto;
+color: #CD0001;
+background: #FFFFFF;
+border: 1px solid;
+}
+ 
+.pagination a:hover{
+color:#fff;
+background: #CD0001;
+border: 1px solid rgb(205, 0, 1);
+}
+ 
+.pagination .current {
+padding: 6px 9px 5px 9px;
+background: #CD0001;
+border: 1px solid rgb(205, 0, 1);
+color: #fff;
+}
+
+/**
+ * Auto grid system
+ */
+.autogrid:after{content:'';display:block;clear:both}.autogrid>*{float:left;margin-bottom:1%;width:100%;margin-left:0}[class] body .autogrid.max-col-1>*{width:100%!important;margin-left:0!important}.autogrid>:first-child:nth-last-child(n+2),[class] .autogrid>:first-child:nth-last-child(n+2)~*,[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2),[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2)~*{width:49.5%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+2),.autogrid>:first-child:nth-last-child(n+2)~:nth-child(2n+1),[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2),[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2)~:nth-child(2n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+3),[class] .autogrid>:first-child:nth-last-child(n+3)~*,[class] body .autogrid.max-col-3>:first-child:nth-last-child(n+3),[class] body .autogrid.max-col-3>:first-child:nth-last-child(n+3)~*{width:32.66667%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+3),.autogrid>:first-child:nth-last-child(n+3)~:nth-child(3n+1),[class] body .autogrid.max-col-3>:first-child:nth-last-child(n+3),[class] body .autogrid.max-col-3>:first-child:nth-last-child(n+3)~:nth-child(3n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+4),[class] .autogrid>:first-child:nth-last-child(n+4)~*,[class] body .autogrid.max-col-4>:first-child:nth-last-child(n+4),[class] body .autogrid.max-col-4>:first-child:nth-last-child(n+4)~*{width:24.25%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+4),.autogrid>:first-child:nth-last-child(n+4)~:nth-child(4n+1),[class] body .autogrid.max-col-4>:first-child:nth-last-child(n+4),[class] body .autogrid.max-col-4>:first-child:nth-last-child(n+4)~:nth-child(4n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+5),[class] .autogrid>:first-child:nth-last-child(n+5)~*,[class] body .autogrid.max-col-5>:first-child:nth-last-child(n+5),[class] body .autogrid.max-col-5>:first-child:nth-last-child(n+5)~*{width:19.2%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+5),.autogrid>:first-child:nth-last-child(n+5)~:nth-child(5n+1),[class] body .autogrid.max-col-5>:first-child:nth-last-child(n+5),[class] body .autogrid.max-col-5>:first-child:nth-last-child(n+5)~:nth-child(5n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+6),[class] .autogrid>:first-child:nth-last-child(n+6)~*,[class] body .autogrid.max-col-6>:first-child:nth-last-child(n+6),[class] body .autogrid.max-col-6>:first-child:nth-last-child(n+6)~*{width:15.83333%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+6),.autogrid>:first-child:nth-last-child(n+6)~:nth-child(6n+1),[class] body .autogrid.max-col-6>:first-child:nth-last-child(n+6),[class] body .autogrid.max-col-6>:first-child:nth-last-child(n+6)~:nth-child(6n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+7),[class] .autogrid>:first-child:nth-last-child(n+7)~*,[class] body .autogrid.max-col-7>:first-child:nth-last-child(n+7),[class] body .autogrid.max-col-7>:first-child:nth-last-child(n+7)~*{width:13.42857%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+7),.autogrid>:first-child:nth-last-child(n+7)~:nth-child(7n+1),[class] body .autogrid.max-col-7>:first-child:nth-last-child(n+7),[class] body .autogrid.max-col-7>:first-child:nth-last-child(n+7)~:nth-child(7n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+8),[class] .autogrid>:first-child:nth-last-child(n+8)~*,[class] body .autogrid.max-col-8>:first-child:nth-last-child(n+8),[class] body .autogrid.max-col-8>:first-child:nth-last-child(n+8)~*{width:11.625%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+8),.autogrid>:first-child:nth-last-child(n+8)~:nth-child(8n+1),[class] body .autogrid.max-col-8>:first-child:nth-last-child(n+8),[class] body .autogrid.max-col-8>:first-child:nth-last-child(n+8)~:nth-child(8n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+9),[class] .autogrid>:first-child:nth-last-child(n+9)~*,[class] body .autogrid.max-col-9>:first-child:nth-last-child(n+9),[class] body .autogrid.max-col-9>:first-child:nth-last-child(n+9)~*{width:10.22222%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+9),.autogrid>:first-child:nth-last-child(n+9)~:nth-child(9n+1),[class] body .autogrid.max-col-9>:first-child:nth-last-child(n+9),[class] body .autogrid.max-col-9>:first-child:nth-last-child(n+9)~:nth-child(9n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+10),[class] .autogrid>:first-child:nth-last-child(n+10)~*,[class] body .autogrid.max-col-10>:first-child:nth-last-child(n+10),[class] body .autogrid.max-col-10>:first-child:nth-last-child(n+10)~*{width:9.1%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+10),.autogrid>:first-child:nth-last-child(n+10)~:nth-child(10n+1),[class] body .autogrid.max-col-10>:first-child:nth-last-child(n+10),[class] body .autogrid.max-col-10>:first-child:nth-last-child(n+10)~:nth-child(10n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+11),[class] .autogrid>:first-child:nth-last-child(n+11)~*,[class] body .autogrid.max-col-11>:first-child:nth-last-child(n+11),[class] body .autogrid.max-col-11>:first-child:nth-last-child(n+11)~*{width:8.18182%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+11),.autogrid>:first-child:nth-last-child(n+11)~:nth-child(11n+1),[class] body .autogrid.max-col-11>:first-child:nth-last-child(n+11),[class] body .autogrid.max-col-11>:first-child:nth-last-child(n+11)~:nth-child(11n+1){margin-left:0;clear:both}.autogrid>:first-child:nth-last-child(n+12),[class] .autogrid>:first-child:nth-last-child(n+12)~*,[class] body .autogrid.max-col-12>:first-child:nth-last-child(n+12),[class] body .autogrid.max-col-12>:first-child:nth-last-child(n+12)~*{width:7.41667%;clear:inherit;margin-left:1%}.autogrid>:first-child:nth-last-child(n+12),.autogrid>:first-child:nth-last-child(n+12)~:nth-child(12n+1),[class] body .autogrid.max-col-12>:first-child:nth-last-child(n+12),[class] body .autogrid.max-col-12>:first-child:nth-last-child(n+12)~:nth-child(12n+1){margin-left:0;clear:both}@media (max-width:900px){.autogrid>:first-child:nth-last-child(n+3),[class] .autogrid>:first-child:nth-last-child(n+3)~*{width:32.66667%!important;clear:inherit!important;margin-left:1%!important}.autogrid>:first-child:nth-last-child(n+3),.autogrid>:first-child:nth-last-child(n+3)~:nth-child(3n+1){margin-left:0!important;clear:both!important}[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2),[class] body .autogrid.max-col-2>:first-child:nth-last-child(n+2)~*{width:49.5%!important;clear:inherit!important;margin-left:1%!important}[class] body .max-col-2>:first-child:nth-last-child(n+2),[class] body .max-col-2>:first-child:nth-last-child(n+2)~:nth-child(2n+1){margin-left:0!important;clear:both!important}}@media (max-width:600px){html[class] body .autogrid>:first-child:nth-child(n),html[class] body .autogrid>:nth-child(n)+:nth-child(n){width:100%!important;margin-left:0!important}}
