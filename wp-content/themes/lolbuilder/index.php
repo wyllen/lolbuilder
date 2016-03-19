@@ -8,6 +8,7 @@ $aContext = array(
 );
 $cxContext = stream_context_create($aContext);
 $cxContext = null;
+
 /*
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -44,6 +45,7 @@ foreach ($maps->data as $mapID => $map) {
     }
 }
 
+
 /*
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -63,6 +65,8 @@ if ( false === ( $items = get_transient( 'items' ) ) ) {
 	$items = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.5.1/data/en_US/item.json', false, $cxContext));
 	set_transient( 'items', $items );
 }
+
+
 /*
 ----------------------------------------------------------------------
 ----------------------------Static Data Translate----------------------------
@@ -106,29 +110,6 @@ echo '<br><br> -----------------------------------------------------------------
     }
 
 
-    // register_field_group(
-    // 	array(
-    //     'key'                   => 'stats',
-    //     'title'                 => 'Stats',
-    //     'fields'                => $fields,
-    //     'location'              => array(
-    //         array(
-    //             array(
-    //                 'param'    => 'post_type',
-    //                 'operator' => '==',
-    //                 'value'    => 'item',
-    //             ),
-    //         ),
-    //     ),
-    //     'menu_order'            => 0,
-    //     'position'              => 'normal',
-    //     'style'                 => 'default',
-    //     'label_placement'       => 'top',
-    //     'instruction_placement' => 'label',
-    //     'hide_on_screen'        => '',
-    // )
-    // 	);
-
 foreach ($fields as $fieldSlug => $fieldValues) {
     $acfFunctions = New acf_field_functions();
     $acfFunctions->update_field($fieldValues, 437);
@@ -145,38 +126,50 @@ foreach ($fields as $fieldSlug => $fieldValues) {
 echo '<br><br> ----------------------------------------------------------------------<br>
 ----------------------------Populate items----------------------------<br>
 ----------------------------------------------------------------------<br>';
+//$i =0;
+//var_dump($items->data);
 foreach ($items->data as $itemID => $item) {
-    $item->name = str_replace(':', ' ', $item->name);
-    $itemPost = get_page_by_title($item->name, OBJECT, 'item');
-    var_dump($itemPost);
+    //if($i<=10){
+        var_dump($item);
+        $item->name = str_replace(':', ' ', $item->name);
+        $itemPost = get_page_by_title($item->name, OBJECT, 'item');
+        var_dump($itemPost);
 
-    if (is_null($itemPost)) {
-        echo $item->name . ' Item a été créé <br>';
-        $itemPostID = wp_insert_post(
-            array(
-                'post_title'   => $item->name,
-                'post_status'  => 'publish',
-                'post_type'    => 'item',
-                'post_excerpt' => $item->plaintext,
-            ));
-    }else{
-        $itemPostID = $itemPost->ID;
-        echo $item->name . ' Item a été mis a jour <br>';
-    }
-    var_dump($item->name);
-    var_dump($itemPostID);
-        update_meta_value('item_id', $itemID, $itemPostID);
-        update_meta_value('used_to_craft', getRelationItem($item->into), $itemPostID);
-        update_meta_value('crafted_with', getRelationItem($item->from), $itemPostID);
-        update_meta_value('gold_base', $item->gold->base, $itemPostID);
-        update_meta_value('gold_total', $item->gold->total, $itemPostID);
-        if(isset($item->depth))
-        update_meta_value('depth', $item->depth, $itemPostID);
-        $itemStats = get_object_vars($item->stats);
-        foreach ($itemStats as $stat => $statValue) {
-            var_dump($stat);
-            var_dump($statValue);
-            update_meta_value($stat, $statValue, $itemPostID);            
+        if (is_null($itemPost)) {
+            echo $item->name . ' Item a été créé <br>';
+            $itemPostID = wp_insert_post(
+                array(
+                    'post_title'   => $item->name,
+                    'post_status'  => 'publish',
+                    'post_type'    => 'item',
+                    'post_excerpt' => $item->plaintext,
+                ));
+        }else{
+            $itemPostID = $itemPost->ID;
+             $my_post = array(
+                  'ID'           => $itemPostID,
+                  'post_content' => $item->description,
+              );
+              wp_update_post( $my_post );
+            echo $item->name . ' Item a été mis a jour <br>';
         }
+        if($itemPostID != 0){
+            update_meta_value('item_id', $itemID, $itemPostID);
+            update_field( 'field_56ebca3fef24a', getRelationItem($item->into), $itemPostID );
+            update_field( 'field_56ebcc69ef24d', getRelationItem($item->from), $itemPostID );
+            update_field( 'field_56ebd4224fe67', getRelationMaps($item->maps), $itemPostID );
+            update_meta_value('gold_base', $item->gold->base, $itemPostID);
+            update_meta_value('gold_total', $item->gold->total, $itemPostID);
+            wp_set_post_terms( $itemPostID, $item->tags, 'item-tag');
+            if(isset($item->depth))
+            update_meta_value('depth', $item->depth, $itemPostID);
+            $itemStats = get_object_vars($item->stats);
+            foreach ($itemStats as $stat => $statValue) {
+                update_meta_value($stat, $statValue, $itemPostID);            
+            }
+
+        }
+   // }
+
 }
 
