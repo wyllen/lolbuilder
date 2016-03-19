@@ -7,7 +7,7 @@ $aContext = array(
     ),
 );
 $cxContext = stream_context_create($aContext);
-
+$cxContext = null;
 /*
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -137,7 +137,6 @@ foreach ($fields as $fieldSlug => $fieldValues) {
         
 
 
-
 /*
 ----------------------------------------------------------------------
 ----------------------------Populate items----------------------------
@@ -147,7 +146,10 @@ echo '<br><br> -----------------------------------------------------------------
 ----------------------------Populate items----------------------------<br>
 ----------------------------------------------------------------------<br>';
 foreach ($items->data as $itemID => $item) {
+    $item->name = str_replace(':', ' ', $item->name);
     $itemPost = get_page_by_title($item->name, OBJECT, 'item');
+    var_dump($itemPost);
+
     if (is_null($itemPost)) {
         echo $item->name . ' Item a été créé <br>';
         $itemPostID = wp_insert_post(
@@ -157,26 +159,24 @@ foreach ($items->data as $itemID => $item) {
                 'post_type'    => 'item',
                 'post_excerpt' => $item->plaintext,
             ));
-        update_field('item_id', $itemID, $itemPostID);
-        update_field('used_to_craft', $item->into, $itemPostID);
-        update_field('crafted_with', $item->from, $itemPostID);
-        update_field('gold_base', $item->gold->base, $itemPostID);
-        update_field('gold_total', $item->gold->total, $itemPostID);
-        update_field('depth', $item->depth, $itemPostID);
-
     }else{
         $itemPostID = $itemPost->ID;
-        update_field('item_id', $itemID, $itemPostID);
-        update_field('used_to_craft', $item->into, $itemPostID);
-        update_field('crafted_with', $item->from, $itemPostID);
-        update_field('gold_base', $item->gold->base, $itemPostID);
-        update_field('gold_total', $item->gold->total, $itemPostID);
-        update_field('depth', $item->depth, $itemPostID);
+        echo $item->name . ' Item a été mis a jour <br>';
+    }
+    var_dump($item->name);
+    var_dump($itemPostID);
+        update_meta_value('item_id', $itemID, $itemPostID);
+        update_meta_value('used_to_craft', getRelationItem($item->into), $itemPostID);
+        update_meta_value('crafted_with', getRelationItem($item->from), $itemPostID);
+        update_meta_value('gold_base', $item->gold->base, $itemPostID);
+        update_meta_value('gold_total', $item->gold->total, $itemPostID);
+        if(isset($item->depth))
+        update_meta_value('depth', $item->depth, $itemPostID);
         $itemStats = get_object_vars($item->stats);
         foreach ($itemStats as $stat => $statValue) {
             var_dump($stat);
             var_dump($statValue);
-            update_field($stat, $statValue, $itemPostID);            
+            update_meta_value($stat, $statValue, $itemPostID);            
         }
-    }
 }
+
