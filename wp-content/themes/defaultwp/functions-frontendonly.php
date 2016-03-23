@@ -32,6 +32,8 @@ function styles_and_scripts_front()
     wp_enqueue_script('jquery', get_template_directory_uri() . '/js/vendor/jquery.min.js', array(), '2.1.4', false);
     wp_enqueue_script('foundation', get_template_directory_uri() . '/js/foundation.min.js', array('jquery'), '2.1.4', true);
 
+    wp_enqueue_script('app', get_stylesheet_directory_uri() . '/js/app.js', array(), '1.0.0', false);
+
 }
 add_action('wp_enqueue_scripts', 'styles_and_scripts_front', 10);
 
