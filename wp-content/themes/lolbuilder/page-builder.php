@@ -66,8 +66,16 @@ $args = array(
 );
 $items = new WP_Query( $args );
 ?>
-<h2>Items</h2>
-<div class="list-items">
+<div class="header-list-items row">
+	<h2 class="column large-6">Items</h2>
+	<div class="list-items-sort column large-4 text-right">
+		<select class="sort-by-select">
+			<option value="name">Sort by name</option>
+			<option value="gold">Sort by cost</option>
+		</select>
+	</div>
+</div>
+<div class="list-items row">
 	<?php
 	while($items->have_posts()): $items->the_post();
 	if ( false === ( $itemStats = get_transient( 'itemStats_'.$post->post_name ) ) ) {
@@ -84,14 +92,17 @@ $items = new WP_Query( $args );
 				}
 			}
 		}
-		set_transient( 'itemStats_'.$post->post_name, $itemStats );
+		set_transient( 'itemStats_'.$post->post_name, $itemStats, 180 );
 	}
 	?>
-	<div class="item-list" <?php echo $itemStats; ?>>
+	<div class="item-list" <?php echo $itemStats; ?> data-name="<?php the_title(); ?>" data-gold="<?php the_field('gold_total'); ?>">
 		<div class="item-list-thumbnail">
 			<?php the_post_thumbnail(); ?>
 		</div>
 		<div class="item-list-name"><?php the_title(); ?></div>
+		<div class="item-list-gold">
+			<?php the_field('gold_total'); echo ' <small>('.get_field('gold_base').')</small>'; ?>
+		</div>
 	</div>
 	<?php
 endwhile;

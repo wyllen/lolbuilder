@@ -56,6 +56,16 @@
     	}
     }
 
+    function sortItems(sortby){
+    	$('.item-list').sort(function(a,b) {
+    		if(sortby=='gold'){    			
+		     return parseInt($(a).data(sortby)) > parseInt($(b).data(sortby));
+    		}else{
+		     return $(a).data(sortby) > $(b).data(sortby);
+    		}
+		}).appendTo('.list-items');		
+    }
+
     removeUselessFilters();
 
     $('.list-stats-filters').on('change keyup', '.filter-input-name', function(){
@@ -71,6 +81,11 @@
     	$(this).parents('.field-filter').remove();
     	 filterItems();
     	removeUselessFilters();
+    })
+
+
+    $('.sort-by-select').on('change',function(){
+    	sortItems($(this).val());
     })
 
 
