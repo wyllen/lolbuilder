@@ -70,6 +70,7 @@
     $('.list-stats-filters').on('click', '.remove-filter', function(){
     	$(this).parents('.field-filter').remove();
     	 filterItems();
+    	removeUselessFilters();
     })
 
 
