@@ -152,10 +152,52 @@ body,h1, h2, h3, h4, h5, h6{
     margin: 0;
 }
 
+.champion-bar-chart {
+    display: inline-block;
+    text-align: center;
+    margin:0 10px;
+}
 
 .champion-list-preview{
     display: none;
 }
 .champions-selector{
     display: none;
+}
+
+.champion-bar-chart-wrapper {
+    width: 50px;
+    height: 150px;
+    position: relative;
+}
+
+.champion-bar-chart-wrapper * {
+    width: 100%;
+    color: #fff;
+    text-align: center;
+}
+
+.champion-bar-chart-total {
+    position: absolute;
+    bottom: 0;
+}
+
+.champion-bar-chart-items {
+    background: #D05D5D;
+}
+
+.champion-bar-chart-base {
+    background: #7373BF;
+}
+.champion-bar-chart-total > * {
+    position: relative;
+}
+
+.champion-bar-chart-total > * > span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 50%;
+    line-height: 1em;
+    margin-top: -0.5em;
 }

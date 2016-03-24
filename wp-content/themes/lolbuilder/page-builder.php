@@ -4,7 +4,57 @@ get_header();
 <div class="build-section champions-section row">
 	<h2>1 - Pick a champion!</h2>
 	<div class="chosen-champion">
-		
+		<div class="row">
+			<div class="column large-9">
+				<div class="row">
+					<div class="column large-3">
+						<div class="chosen-champion-thumbnail">
+							<img src="" alt="champion img">
+						</div>
+					</div>
+					<div class="column large-9">
+						<ul class="chosen-champion-stats row large-up-3">
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+							<li class="column"><strong>Stats: </strong><span>10</span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12">
+						<div class="champion-bar-charts">
+							<div class="champion-bar-chart">
+								<div class="champion-bar-chart-wrapper">
+									<div class="champion-bar-chart-total"  style="height:20%">
+										<div class="champion-bar-chart-base" style="height:50%"><span>30</span></div>
+										<div class="champion-bar-chart-items" style="height:50%"><span>30</span></div>
+									</div>
+								</div>
+								<div class="champion-bar-chart-value">60</div>
+								<div class="champion-bar-chart-label">Armor</div>
+							</div>
+							<div class="champion-bar-chart">
+								<div class="champion-bar-chart-wrapper">
+									<div class="champion-bar-chart-total"  style="height:70%">
+										<div class="champion-bar-chart-base" style="height:60%"><span>2000</span></div>
+										<div class="champion-bar-chart-items" style="height:40%"><span>1500</span></div>
+									</div>
+								</div>
+								<div class="champion-bar-chart-value">3500</div>
+								<div class="champion-bar-chart-label">Health</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="column large-3">
+				<canvas id="championChart" width="320px" height="320px"></canvas>
+			</div>
+		</div>
 		<script type="text/html" id="chosenChampionTpl">
 		   
 		</script>
@@ -24,7 +74,7 @@ get_header();
 				'orderby' => 'title'
 			);
 			$champions = new WP_Query( $args );
-			set_transient( 'wp_query_champions', $champions, 180 );
+			set_transient( 'wp_query_champions', $champions, 1800 );
 		}	
 		while($champions->have_posts()): $champions->the_post();
 
@@ -36,7 +86,7 @@ get_header();
 					$championStats .= ' data-'.$fieldOject['name'].'="'.get_field($fieldOject['name']).'"';
 				}
 			}
-			set_transient( 'championStats_'.$post->post_name, $championStats, 180 );
+			set_transient( 'championStats_'.$post->post_name, $championStats, 1800 );
 		}		
 	?>
 	<div class="champion-list" <?php echo $championStats; ?> data-name="<?php the_title(); ?>" <?php echo $championStats; ?> >
@@ -147,7 +197,7 @@ get_header();
 				'orderby' => 'title'
 			);
 			$items = new WP_Query( $args );
-			set_transient( 'wp_query_items', $items, 180 );
+			set_transient( 'wp_query_items', $items, 1800 );
 		}	
 		?>
 		<div class="header-list-items row">
@@ -176,7 +226,7 @@ get_header();
 						}
 					}
 				}
-				set_transient( 'itemStats_'.$post->post_name, $itemStats, 180 );
+				set_transient( 'itemStats_'.$post->post_name, $itemStats, 1800 );
 			}
 			?>
 			<div class="item-list" <?php echo $itemStats; ?> data-name="<?php the_title(); ?>" data-gold="<?php the_field('gold_total'); ?>">
