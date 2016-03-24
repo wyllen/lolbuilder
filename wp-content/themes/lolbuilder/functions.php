@@ -1,5 +1,29 @@
 <?php
 
+function getApiData($api, $cxContext = false){
+	if ( false === ( $apiData = get_transient( $api ) ) ) {
+		switch ($api) {
+			case 'item':
+					$apiData = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/item?locale=en_US&itemListData=all&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
+				break;
+			case 'map':
+					$apiData = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/map?locale=en_US&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
+				break;
+			case 'champion':
+					$apiData = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion?locale=en_US&champData=all&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
+				break;	
+			case 'language':
+					$apiData = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/language-strings?locale=en_US&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
+				break;
+			default:
+				return flase;
+				break;
+		}
+		set_transient( $api, $apiData, 180 );
+	}
+	return $apiData;
+}
+
 function update_meta_value($column, $value, $postID){
 	global $wpdb;
 	$wpdb->replace( 
@@ -13,10 +37,7 @@ function update_meta_value($column, $value, $postID){
 }
 
 function getItemsPost($cxContext = null){
-		if ( false === ( $items = get_transient( 'items' ) ) ) {
-			$items = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.5.1/data/en_US/item.json', false, $cxContext));
-			set_transient( 'items', $items );
-		}
+		$items = getApiData('item', $cxContext);
 		$itemsArray = array();
 		foreach ($items->data as $itemID => $item) {
 			$item->name = str_replace(':', ' ', $item->name);
@@ -27,12 +48,22 @@ function getItemsPost($cxContext = null){
 		}
 		return $itemsArray;
 }
-function getMapsPost($cxContext = null){
 
-		if ( false === ( $maps = get_transient( 'maps' ) ) ) {
-			$maps = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/map?api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
-			set_transient( 'maps', $maps );
-		}
+
+// function getChampionsPost($cxContext = null){
+// 		$champions = getApiData('champion', $cxContext);
+// 		$championsArray = array();
+// 		foreach ($champions->data as $championName => $champion) {
+// 			$championPost = get_page_by_title($championName, OBJECT, 'champion');
+// 			if (!is_null($championPost)) {
+// 				$championsArray[$championID] = $championPost->ID;
+// 			}
+// 		}
+// 		return $championsArray;
+// }
+
+function getMapsPost($cxContext = null){		
+		$maps = getApiData('map', $cxContext);
 		$mapsArray = array();
 		foreach ($maps->data as $mapID => $map) {
 		    $mapPost = get_page_by_title($map->mapName, OBJECT, 'map');
@@ -40,7 +71,6 @@ function getMapsPost($cxContext = null){
 		        $mapsArray[$mapID]=$mapPost->ID;
 		    }
 		}
-
 		return $mapsArray;
 }
 
@@ -105,10 +135,7 @@ function Generate_Featured_Image( $image_url, $post_id  ){
 
 function populateMaps($cxContext = null){
 
-	if ( false === ( $maps = get_transient( 'maps' ) ) ) {
-		$maps = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/map?api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
-		set_transient( 'maps', $maps );
-	}
+	$maps = getApiData('map', $cxContext);
 
 	echo '<br><br> ----------------------------------------------------------------------<br>
 	----------------------------Populate maps----------------------------<br>
@@ -139,15 +166,9 @@ function populateMaps($cxContext = null){
 
 function populateStatsField($cxContext = null){
 
-		if ( false === ( $items = get_transient( 'items' ) ) ) {
-			$items = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.5.1/data/en_US/item.json', false, $cxContext));
-			set_transient( 'items', $items );
-		}
+		$items = getApiData('item', $cxContext);
 
-		if ( false === ( $translates = get_transient( 'translates' ) ) ) {
-			$translates = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/language-strings?locale=en_US&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
-			set_transient( 'translates', $translates );
-		}
+		$translates = getApiData('language', $cxContext);
 
 		echo '<br><br> ----------------------------------------------------------------------<br>
 		----------------------------Populate stats----------------------------<br>
@@ -190,16 +211,9 @@ function populateStatsField($cxContext = null){
 
 
 function populateItemsPosts($cxContext = null){
+	global $wpdb;
 
-	if ( false === ( $items = get_transient( 'items' ) ) ) {
-		$items = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.5.1/data/en_US/item.json', false, $cxContext));
-		set_transient( 'items', $items );
-	}
-
-	if ( false === ( $translates = get_transient( 'translates' ) ) ) {
-		$translates = json_decode(file_get_contents('https://global.api.pvp.net/api/lol/static-data/euw/v1.2/language-strings?locale=en_US&api_key=a89dd7d8-92ca-43d3-ac96-8f87d203a542', false, $cxContext));
-		set_transient( 'translates', $translates );
-	}
+	$items = getApiData('item', $cxContext);	
 
 	echo '<br><br> ----------------------------------------------------------------------<br>
 	----------------------------Populate items----------------------------<br>
@@ -221,6 +235,7 @@ function populateItemsPosts($cxContext = null){
 		            'post_status'  => 'publish',
 		            'post_type'    => 'item',
 		            'post_excerpt' => $item->plaintext,
+		          	'post_content' => $item->description
 		        ));
 		    echo $item->name . ' <br>-----------Item a été créé-----------<br>';
 		    ob_flush();flush();
@@ -234,11 +249,115 @@ function populateItemsPosts($cxContext = null){
 		    echo $item->name . '<br>-----------IItem a été mis a jour-----------<br>';
 		    ob_flush();flush();
 		}
+		var_dump($item->description);
+		$wpdb->update($wpdb->posts, array("post_content"=>$item->description), array("ID"=>$itemPostID), array("%s"), array("%d"));
 		update_meta_value('item_id', $itemID, $itemPostID);
 		$itemsArray[$itemID] = $itemPostID;
 	}
 
 	return $itemsArray;
+		        
+}
+
+
+function populateChampionPosts($cxContext = null){
+	global $wpdb;
+
+	$champions = getApiData('champion', $cxContext);	
+
+	echo '<br><br> ----------------------------------------------------------------------<br>
+	----------------------------Populate champions----------------------------<br>
+	----------------------------------------------------------------------<br>';
+
+	$championsArray = array();
+	foreach ($champions->data as $championKey => $champion) {
+		$championName = $champion->name;
+		$championPost = get_page_by_title($championName, OBJECT, 'champion');
+
+
+		if (is_null($championPost)) {
+		    $championPostID = wp_insert_post(
+		        array(
+		            'post_title'   => $championName,
+		            'post_status'  => 'publish',
+		            'post_type'    => 'champion',
+		            'post_excerpt' => $champion->blurb,
+		          	'post_content' => $champion->blurb
+		        ));
+		    echo $championName . ' <br>-----------champion a été créé-----------<br>';
+		    ob_flush();flush();
+		}else{
+		    $championPostID = $championPost->ID;
+		     $my_post = array(
+		          'ID'           => $championPostID,
+		          'post_content' => $champion->blurb,
+		      );
+		      wp_update_post( $my_post );
+		    echo $championName . '<br>-----------champion a été mis a jour-----------<br>';
+		    ob_flush();flush();
+		}
+		$championsArray[$championID] = $championPostID;
+	}
+
+	return $championsArray;		        
+}
+
+function populateChampionsFields( $cxContext = null){
+
+	$champions = getApiData('champion', $cxContext);
+
+	foreach ($champions->data as $championKey => $champion) {
+		$championName = $champion->name;
+		$championPost = get_page_by_title($championName, OBJECT, 'champion');
+		$championPostID = $championPost->ID;
+		foreach ($champion->info as $key => $value) {
+			update_meta_value($key , $value, $championPostID);    
+		}
+		foreach ($champion->stats as $key => $value) {
+			update_meta_value($key , $value, $championPostID);    
+		}		
+		Generate_Featured_Image( 'http://ddragon.leagueoflegends.com/cdn/6.6.1/img/champion/'.$champion->image->full, $championPostID );
+		echo $championName . ' Stats mis à jour <br>';  
+		ob_flush();flush();  
+	}
+		        
+}
+
+function updateItemsContent(){
+	$aContext = array(
+        'http' => array(
+            'proxy'           => 'nrs-proxy.ad-subs.w2k.francetelecom.fr:3128',
+            'request_fulluri' => true,
+        ),
+    );
+    $cxContext = stream_context_create($aContext);
+
+	$items = getApiData('item', $cxContext);
+
+
+	echo '<br><br> ----------------------------------------------------------------------<br>
+	----------------------------Populate items----------------------------<br>
+	----------------------------------------------------------------------<br>';
+
+	foreach ($items->data as $itemID => $item) {
+		var_dump($item->name);
+		var_dump($item->description);
+		$item->name = str_replace(':', ' ', $item->name);
+		$itemPost = get_page_by_title($item->name, OBJECT, 'item');
+
+		if (is_null($itemPost)) {
+		}else{
+		    $itemPostID = $itemPost->ID;
+		     $my_post = array(
+		          'ID'           => $itemPostID,
+		          'post_content' => $item->description,
+		      );
+		      wp_update_post( $my_post );
+		    echo $item->name . '<br>-----------IItem a été mis a jour-----------<br>';
+		    ob_flush();flush();
+		}
+		update_meta_value('item_id', $itemID, $itemPostID);
+	}
 		        
 }
 
@@ -248,10 +367,8 @@ function populateItemsFields($itemsArray = null, $cxContext = null, $fields = ar
 	if(empty($fields)){
 		$fields = array('into' => 'field_56ebca3fef24a','from' => 'field_56ebcc69ef24d', 'maps' => 'field_56ebd4224fe67', 'gold/base' => 'gold_base', 'gold/total' => 'gold_total', 'depth' => 'depth', 'stats'=>'stats');
 	}
-	if ( false === ( $items = get_transient( 'items' ) ) ) {
-		$items = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.5.1/data/en_US/item.json', false, $cxContext));
-		set_transient( 'items', $items );
-	}
+	$items = getApiData('item', $cxContext);
+
 		foreach ($items->data as $itemID => $item) {
 
 	        $itemPostID = $itemsArray[$itemID];

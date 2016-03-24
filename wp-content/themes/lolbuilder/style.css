@@ -6,11 +6,26 @@ body,h1, h2, h3, h4, h5, h6{
 	color: #000;
 }
 
-.list-items {
+.build-section {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background: #F7F7F7;
+    border-radius: 5px;
+    border: 1px solid #E0E0E0;
+}
+
+.list-items, .champions-selector {
     font-size: 0;
 }
 
-.item-list {
+.item-builder-placeholders, .items-builder-list {
+    font-size: 0;
+}
+.items-selector{
+    display: none;
+}
+.item-list,.item-slot, .champion-list {
     position: relative;
     display: inline-block;
     width: 11%;
@@ -24,6 +39,69 @@ body,h1, h2, h3, h4, h5, h6{
     padding: 1rem 0.2rem;
     cursor: pointer;
     font-size: 1rem;
+}
+.items-build-wrapper{
+    position: relative;
+}
+.items-builder-list{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.item-list.selected-item {
+    box-shadow: 0 0 0 5px rgba(175, 230, 66, 0.68);
+}
+
+.item-list-preview {
+    position: absolute;
+    font-size: 85%;
+    left: 100%;
+    width: 200%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    border-radius: 3px;
+    color: #fff;
+    display:none;
+    pointer-events: none;
+}
+
+.item-list-preview-description stats, .item-list-preview-description unique, .item-list-preview-description active {
+    font-weight: bold;
+}
+
+.item-list:hover .item-list-preview{
+    display:block;
+}
+
+.item-list-preview-description,
+.item-list-gold-preview {
+    text-align: left;
+}
+
+.item-list-gold,
+.item-list-gold-preview {
+    padding-left: 30px;
+    background: url('img/gold.png') no-repeat;
+    line-height: 20px;
+    font-weight: bold;
+    color: #D6A113;
+}
+
+
+.item-list-preview-name {
+    font-size: 1.2rem;
+    margin-bottom: 0.5em;
+}
+.item-list-gold {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
 }
 
 .select-stats-filters {
@@ -74,13 +152,7 @@ body,h1, h2, h3, h4, h5, h6{
     margin: 0;
 }
 
-.item-list-gold {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    padding-left: 30px;
-    background: url('img/gold.png') no-repeat;
-    line-height: 20px;
-    font-weight: bold;
-    color: #D6A113;
+
+.champion-list-preview{
+    display: none;
 }
