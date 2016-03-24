@@ -140,6 +140,10 @@
     })
 
 
+    $('.champions-selector-toggle').on('click',function(){
+        $('.champions-selector').slideToggle();
+    })
+
     $('.add-stat-filter').on('click',function(e){
     	e.preventDefault();
     	var key = $('.select-stats-filters').val();

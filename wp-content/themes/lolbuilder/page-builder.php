@@ -8,8 +8,10 @@ get_header();
 		<script type="text/html" id="chosenChampionTpl">
 		   
 		</script>
+	</div>	
+	<div>
+		<button class="champions-selector-toggle expanded dropdown button">Champions selector</button>
 	</div>
-	<h3>Champions</h3>
 	<div class="champions-selector row">
 	<?php
 		$championStatsFields = get_post_custom_keys('2987');
@@ -74,7 +76,7 @@ get_header();
 		</div>
 	</div>
 
-	<div class="">
+	<div>
 		<button class="items-selector-toggle expanded dropdown button">Items selector</button>
 	</div>
 	<div class="items-selector">

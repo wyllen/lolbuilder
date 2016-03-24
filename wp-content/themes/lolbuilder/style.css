@@ -156,3 +156,6 @@ body,h1, h2, h3, h4, h5, h6{
 .champion-list-preview{
     display: none;
 }
+.champions-selector{
+    display: none;
+}
