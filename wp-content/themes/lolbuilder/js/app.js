@@ -71,7 +71,6 @@
                 var maxValue = maxStatsValue[championStatsBase[i].name];
                  var currentValue = parseFloat(championStatsBase[i].value);
                 if(championStatsBase[i].name=='data-base-attackspeedoffset'){
-                    currentValue = 0.625/( currentValue+1);
                     championStatsBase[i].label = 'Attack per second';
                 }
                 var currentValuePercent = Math.round(currentValue*100/maxValue);
@@ -109,6 +108,11 @@
              var attributeValue = championAttributes[i]['value'];
              var attributeLabel = championsStats[attributeName];
              if (attributeName.indexOf('base') > -1) {
+                if(attributeName=='data-base-attackspeedoffset'){
+                    attributeValue = 0.625/( parseFloat(attributeValue)+1);
+                    attributeValue =  Math.round(attributeValue*1000)/1000;
+                    attributeLabel = 'Attack per second';
+                }
                  var stat = '<li class="column stat-' + attributeName + '"><strong>' + attributeLabel + ': </strong><span>' + attributeValue + '</span></li>';
                  $chosenTpl.find('.chosen-champion-stats').append(stat);
                  championStatsBase[j] = {
