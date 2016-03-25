@@ -152,10 +152,19 @@ body,h1, h2, h3, h4, h5, h6{
     margin: 0;
 }
 
+.champion-bar-charts {
+    height: 220px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.champion-bar-charts:before {content: '';display: inline-block;height: 100%;vertical-align: bottom;}
+
 .champion-bar-chart {
     display: inline-block;
     text-align: center;
-    margin:0 10px;
+    margin: 0px 15px;
+    vertical-align: bottom;
 }
 
 .champion-list-preview{
@@ -167,10 +176,19 @@ body,h1, h2, h3, h4, h5, h6{
 
 .champion-bar-chart-wrapper {
     width: 50px;
-    height: 150px;
+    margin: 0 auto;
+    height: 0;
     position: relative;
+    overflow: hidden;
+    -webkit-transition: 500ms ease all;
+    -moz-transition: 500ms ease all;
+    -ms-transition: 500ms ease all;
+    -o-transition: 500ms ease all;
+    transition: 500ms ease all; 
 }
-
+.ready .champion-bar-chart-wrapper{
+    height: 150px;
+}
 .champion-bar-chart-wrapper * {
     width: 100%;
     color: #fff;
@@ -180,14 +198,18 @@ body,h1, h2, h3, h4, h5, h6{
 .champion-bar-chart-total {
     position: absolute;
     bottom: 0;
+    min-height: 2em;
+    max-height: 100%;
 }
 
 .champion-bar-chart-items {
     background: #D05D5D;
+    min-height: 1em;
 }
 
 .champion-bar-chart-base {
-    background: #7373BF;
+    background: #1BA2B9;
+    min-height: 1em;
 }
 .champion-bar-chart-total > * {
     position: relative;
@@ -200,4 +222,9 @@ body,h1, h2, h3, h4, h5, h6{
     top: 50%;
     line-height: 1em;
     margin-top: -0.5em;
+}
+
+#championChart {
+    margin-top: -2rem;
+    margin-left: -1rem;
 }

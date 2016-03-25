@@ -316,7 +316,7 @@ function populateChampionsFields( $cxContext = null){
 		foreach ($champion->stats as $key => $value) {
 			update_meta_value($key , $value, $championPostID);    
 		}		
-		Generate_Featured_Image( 'http://ddragon.leagueoflegends.com/cdn/6.6.1/img/champion/'.$champion->image->full, $championPostID );
+		//Generate_Featured_Image( 'http://ddragon.leagueoflegends.com/cdn/6.6.1/img/champion/'.$champion->image->full, $championPostID );
 		echo $championName . ' Stats mis à jour <br>';  
 		ob_flush();flush();  
 	}

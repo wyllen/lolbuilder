@@ -4,59 +4,34 @@ get_header();
 <div class="build-section champions-section row">
 	<h2>1 - Pick a champion!</h2>
 	<div class="chosen-champion">
-		<div class="row">
-			<div class="column large-9">
+		<script type="text/html" id="chosenChampionTpl">
+			<div class="chosen-champion-tpl">
 				<div class="row">
-					<div class="column large-3">
-						<div class="chosen-champion-thumbnail">
-							<img src="" alt="champion img">
+					<div class="column large-9">
+						<div class="row">
+							<div class="column large-2">
+								<div class="chosen-champion-thumbnail">
+									<img src="" class="chosen-champion-thumbnail-img" alt="champion img">
+								</div>
+							</div>
+							<div class="column large-10">
+								<ul class="chosen-champion-stats row large-up-3">
+								</ul>
+							</div>
 						</div>
 					</div>
-					<div class="column large-9">
-						<ul class="chosen-champion-stats row large-up-3">
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-							<li class="column"><strong>Stats: </strong><span>10</span></li>
-						</ul>
+
+					<div class="column large-3">
+						<canvas id="championChart" width="320px" height="320px"></canvas>
 					</div>
 				</div>
 				<div class="row">
 					<div class="large-12">
 						<div class="champion-bar-charts">
-							<div class="champion-bar-chart">
-								<div class="champion-bar-chart-wrapper">
-									<div class="champion-bar-chart-total"  style="height:20%">
-										<div class="champion-bar-chart-base" style="height:50%"><span>30</span></div>
-										<div class="champion-bar-chart-items" style="height:50%"><span>30</span></div>
-									</div>
-								</div>
-								<div class="champion-bar-chart-value">60</div>
-								<div class="champion-bar-chart-label">Armor</div>
-							</div>
-							<div class="champion-bar-chart">
-								<div class="champion-bar-chart-wrapper">
-									<div class="champion-bar-chart-total"  style="height:70%">
-										<div class="champion-bar-chart-base" style="height:60%"><span>2000</span></div>
-										<div class="champion-bar-chart-items" style="height:40%"><span>1500</span></div>
-									</div>
-								</div>
-								<div class="champion-bar-chart-value">3500</div>
-								<div class="champion-bar-chart-label">Health</div>
-							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<div class="column large-3">
-				<canvas id="championChart" width="320px" height="320px"></canvas>
-			</div>
-		</div>
-		<script type="text/html" id="chosenChampionTpl">
-		   
+			</div>				   
 		</script>
 	</div>	
 	<div>
@@ -65,8 +40,26 @@ get_header();
 	<div class="champions-selector row">
 	<?php
 		$championStatsFields = get_post_custom_keys('2987');
+			$championStatsArray = array();
+			foreach ($championStatsFields as $key => $field) {		
+				if(substr( $field, 0, 6 ) === "field_"){
+					$fieldOject = get_field_object($field, '2987');
+					if($fieldOject['type'] != 'tab'){
+						$type= 'infos-';
+						if($fieldOject['type'] != 'number'){
+							$type= 'base-';
+						}
+						$championStatsArray['data-'.$type.$fieldOject['name']] = $fieldOject['label'];
+					}
+				}
+			}
+		?>
+		<script>
+		 var championsStats = <?php echo json_encode($championStatsArray); ?>;
+		</script>
+		<?php
 
-		if ( false === ( $champions = get_transient( 'wp_query_champions') ) ) {
+		if ( false === ( $champions = get_transient( 'wp_query_champions2') ) ) {
 			$args = array(
 			    'post_type' => 'champion',
 			    'posts_per_page'    =>  -1,
@@ -74,20 +67,28 @@ get_header();
 				'orderby' => 'title'
 			);
 			$champions = new WP_Query( $args );
-			set_transient( 'wp_query_champions', $champions, 1800 );
+			set_transient( 'wp_query_champions2', $champions, 1800 );
 		}	
 		while($champions->have_posts()): $champions->the_post();
 
-		if ( false === ( $championStats = get_transient( 'championStats_'.$post->post_name ) ) ) {
+		if ( false === ( $championStats = get_transient( 'championStats7_'.$post->post_name ) ) ) {
 			$championStats = '';
+			$championStatsArray = array();
 			foreach ($championStatsFields as $key => $field) {		
 				if(substr( $field, 0, 6 ) === "field_"){
 					$fieldOject = get_field_object($field, '2987');
-					$championStats .= ' data-'.$fieldOject['name'].'="'.get_field($fieldOject['name']).'"';
+					if($fieldOject['type'] != 'tab'){
+						$type= 'infos-';
+						if($fieldOject['type'] != 'number'){
+							$type= 'base-';
+						}
+						$championStats .= ' data-'.$type.$fieldOject['name'].'="'.get_field($fieldOject['name']).'"';
+						$championStatsArray['data-'.$type.$fieldOject['name']] = get_field($fieldOject['name']);
+					}
 				}
 			}
-			set_transient( 'championStats_'.$post->post_name, $championStats, 1800 );
-		}		
+			set_transient( 'championStats7_'.$post->post_name, $championStats, 1800 );
+		}
 	?>
 	<div class="champion-list" <?php echo $championStats; ?> data-name="<?php the_title(); ?>" <?php echo $championStats; ?> >
 		<div class="champion-list-thumbnail">
