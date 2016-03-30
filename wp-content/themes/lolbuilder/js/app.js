@@ -56,11 +56,12 @@
      function getMaxStatsValue() {
          var maxStatsValue = {
              'data-base-armor': 300,
+             'data-base-ap': 450,
              'data-base-attackdamage': 300,
              'data-base-attackspeedoffset': 2.5,
              'data-base-hp': 5000,
              'data-base-hpregen': 150,
-             'data-base-movespeed': 500,
+             'data-base-movespeed': 600,
              'data-base-mp': 5000,
              'data-base-mpregen': 100,
              'data-base-spellblock': 300,
@@ -71,6 +72,7 @@
      function getItemToChampionStat(statName) {
          var itemToChampionStat = {
              'data-base-armor': 'field_flatarmormod',
+             'data-base-ap': 'field_flatmagicdamagemod',
              'data-base-attackdamage': 'field_flatphysicaldamagemod',
              'data-base-attackspeedoffset': 'field_percentattackspeedmod',
              'data-base-hp': 'field_flathppoolmod',
@@ -181,7 +183,11 @@
                  var currentValuePercent = Math.round(totalValue * 100 / maxValue);
                  var itemsPercent = Math.round(totalItemsValue * 100 / totalValue);
                  var basePercent = 100 - itemsPercent;
-                 var chartItems = '<div class="champion-bar-chart-items" style="height:'+itemsPercent+'%; bottom: '+basePercent+'%;"><span>' + totalItemsValue + '</span></div>';
+                 var bottomItem = basePercent+'%';
+                 if(basePercent==0){
+                    bottomItem = '1em';
+                 }
+                 var chartItems = '<div class="champion-bar-chart-items" style="height:'+itemsPercent+'%; bottom: '+bottomItem+';"><span>' + totalItemsValue + '</span></div>';
                  var chartBase = '<div class="champion-bar-chart-base" style="height:'+basePercent+'%"><span>' + currentValue + '</span></div>';
                  var barChart = '<div class="champion-bar-chart"><div class="champion-bar-chart-wrapper"><div class="champion-bar-chart-total"  style="height:' + currentValuePercent + '%">' + chartItems + chartBase + '</div></div><div class="champion-bar-chart-value">' + totalValue + '</div><div class="champion-bar-chart-label">' + attributeLabel + '</div></div>';
                  $('.chosen-champion .chosen-champion-tpl .champion-bar-charts').append(barChart);
@@ -270,8 +276,8 @@
          $item.remove();
          if ($('.items-builder-list .item-list[data-name="' + itemName + '"]').length == 0) {
              $('.list-items .item-list[data-name="' + itemName + '"]').removeClass('selected-item');
-            updateBarCharts();
          }
+        updateBarCharts();
      }
 
      function sortItemsByAttribute(sortby) {

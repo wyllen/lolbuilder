@@ -86,7 +86,7 @@ get_header();
 		</script>
 		<?php
 
-		if ( false === ( $champions = get_transient( 'wp_query_champions3') ) ) {
+		if ( false === ( $champions = get_transient( 'wp_query_champions4') ) ) {
 			$args = array(
 			    'post_type' => 'champion',
 			    'posts_per_page'    =>  -1,
@@ -94,11 +94,11 @@ get_header();
 				'orderby' => 'title'
 			);
 			$champions = new WP_Query( $args );
-			set_transient( 'wp_query_champions3', $champions, 1800 );
+			set_transient( 'wp_query_champions4', $champions, 1800 );
 		}	
 		while($champions->have_posts()): $champions->the_post();
 
-		if ( false === ( $championStats = get_transient( 'championStats8_'.$post->post_name ) ) ) {
+		if ( false === ( $championStats = get_transient( 'championStats12_'.$post->post_name ) ) ) {
 			$championStats = '';
 			$championStatsArray = array();
 			foreach ($championStatsFields as $key => $field) {		
@@ -109,12 +109,16 @@ get_header();
 						if($fieldOject['type'] != 'number'){
 							$type= 'base-';
 						}
-						$championStats .= ' data-'.$type.$fieldOject['name'].'="'.get_field($fieldOject['name']).'"';
-						$championStatsArray['data-'.$type.$fieldOject['name']] = get_field($fieldOject['name']);
+						$fielStatValue = get_field($fieldOject['name']);
+						if(!$fielStatValue){
+							$fielStatValue = 0;
+						}
+						$championStats .= ' data-'.$type.$fieldOject['name'].'="'.$fielStatValue.'"';
+						$championStatsArray['data-'.$type.$fieldOject['name']] = $fielStatValue;
 					}
 				}
 			}
-			set_transient( 'championStats8_'.$post->post_name, $championStats, 1800 );
+			set_transient( 'championStats12_'.$post->post_name, $championStats, 1800 );
 		}
 	?>
 	<div class="champion-list" <?php echo $championStats; ?> data-name="<?php the_title(); ?>" <?php echo $championStats; ?> >
