@@ -30,9 +30,36 @@ get_header();
 						<div class="champion-bar-charts">
 						</div>
 					</div>
+					<div class="large-12">
+					<div class="levelSelector-wrapper">
+						<div class="text-center"><strong>Level:</strong></div>
+						<input type="range" value="1" max="18" min="1" step="1" class="levelSelector"/>
+						<ul class="levelSelector-levels">
+							<li>1</li>
+							<li>2</li>
+							<li>3</li>
+							<li>4</li>
+							<li>5</li>
+							<li>6</li>
+							<li>7</li>
+							<li>8</li>
+							<li>9</li>
+							<li>10</li>
+							<li>11</li>
+							<li>12</li>
+							<li>13</li>
+							<li>14</li>
+							<li>15</li>
+							<li>16</li>
+							<li>17</li>
+							<li>18</li>
+						</ul>
+					</div>
+					</div>
 				</div>
 			</div>				   
 		</script>
+
 	</div>	
 	<div>
 		<button class="champions-selector-toggle expanded dropdown button">Champions selector</button>
@@ -59,7 +86,7 @@ get_header();
 		</script>
 		<?php
 
-		if ( false === ( $champions = get_transient( 'wp_query_champions2') ) ) {
+		if ( false === ( $champions = get_transient( 'wp_query_champions3') ) ) {
 			$args = array(
 			    'post_type' => 'champion',
 			    'posts_per_page'    =>  -1,
@@ -67,11 +94,11 @@ get_header();
 				'orderby' => 'title'
 			);
 			$champions = new WP_Query( $args );
-			set_transient( 'wp_query_champions2', $champions, 1800 );
+			set_transient( 'wp_query_champions3', $champions, 1800 );
 		}	
 		while($champions->have_posts()): $champions->the_post();
 
-		if ( false === ( $championStats = get_transient( 'championStats7_'.$post->post_name ) ) ) {
+		if ( false === ( $championStats = get_transient( 'championStats8_'.$post->post_name ) ) ) {
 			$championStats = '';
 			$championStatsArray = array();
 			foreach ($championStatsFields as $key => $field) {		
@@ -87,7 +114,7 @@ get_header();
 					}
 				}
 			}
-			set_transient( 'championStats7_'.$post->post_name, $championStats, 1800 );
+			set_transient( 'championStats8_'.$post->post_name, $championStats, 1800 );
 		}
 	?>
 	<div class="champion-list" <?php echo $championStats; ?> data-name="<?php the_title(); ?>" <?php echo $championStats; ?> >

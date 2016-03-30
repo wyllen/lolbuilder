@@ -53,45 +53,147 @@
          });
      }
 
-     function setBarCharts(championStatsBase) {
+     function getMaxStatsValue() {
          var maxStatsValue = {
-         'data-base-armor': 300, 
-         'data-base-attackdamage' : 300, 
-         'data-base-attackspeedoffset' : 2.5,
-         'data-base-hp' : 5000,
-         'data-base-hpregen' : 150,
-         'data-base-movespeed' : 500,
-         'data-base-mp' : 5000,
-         'data-base-mpregenperlevel' : 100,
-         'data-base-spellblock' : 300,
+             'data-base-armor': 300,
+             'data-base-attackdamage': 300,
+             'data-base-attackspeedoffset': 2.5,
+             'data-base-hp': 5000,
+             'data-base-hpregen': 150,
+             'data-base-movespeed': 500,
+             'data-base-mp': 5000,
+             'data-base-mpregen': 100,
+             'data-base-spellblock': 300,
          };
-         console.log(championStatsBase);
-         for (var i = championStatsBase.length - 1; i >= 0; i--) {
-             if(typeof maxStatsValue[championStatsBase[i].name] !== 'undefined'){
-                var maxValue = maxStatsValue[championStatsBase[i].name];
-                 var currentValue = parseFloat(championStatsBase[i].value);
-                if(championStatsBase[i].name=='data-base-attackspeedoffset'){
-                    championStatsBase[i].label = 'Attack per second';
-                }
-                var currentValuePercent = Math.round(currentValue*100/maxValue);
-                if(currentValue < 10){
-                    if(championStatsBase[i].name=='data-base-attackspeedoffset'){
-                        currentValue = Math.round(currentValue*1000)/1000;
-                    }else{
-                        currentValue = Math.round(currentValue*100)/100;
-                    }
-                }else{
-                    currentValue = Math.round(currentValue);
-                }
-                var barChart = '<div class="champion-bar-chart"><div class="champion-bar-chart-wrapper"><div class="champion-bar-chart-total"  style="height:'+currentValuePercent+'%"><div class="champion-bar-chart-base" style="height:100%"><span>'+currentValue+'</span></div></div></div><div class="champion-bar-chart-value">'+currentValue+'</div><div class="champion-bar-chart-label">'+championStatsBase[i].label+'</div></div>';
-                $('.chosen-champion .chosen-champion-tpl .champion-bar-charts').append(barChart);
-             }             
-         };
-         setTimeout(function(){ 
-            $('.champion-bar-charts').addClass('ready');
-        }, 200);
-         
+         return maxStatsValue;
      }
+
+     function getItemToChampionStat(statName) {
+         var itemToChampionStat = {
+             'data-base-armor': 'field_flatarmormod',
+             'data-base-attackdamage': 'field_flatphysicaldamagemod',
+             'data-base-attackspeedoffset': 'field_percentattackspeedmod',
+             'data-base-hp': 'field_flathppoolmod',
+             'data-base-hpregen': 'field_flathpregenmod',
+             'data-base-movespeed': 'field_flatmovementspeedmod',
+             'data-base-mp': 'field_flatmppoolmod',
+             'data-base-mpregen': 'field_flatmpregenmod',
+             'data-base-spellblock': 'field_flatspellblockmod'
+         };
+         var itemStatName = itemToChampionStat[statName];
+         return itemStatName;
+     }
+
+     function getChampionStat(base, attibute) {
+         var flatItemsValue = 0;
+         $('.items-builder-list .item-list[' + attibute + ']').each(function() {
+             flatItemsValue = flatItemsValue + parseFloat($(this).attr(attibute));
+         })
+         var totalValue = base + flatItemsValue;
+         return {
+             flatItemsValue: flatItemsValue,
+             totalValue: totalValue
+         }
+     }
+
+     function getChampionAttackSpeed(base) {
+         var flatItemsValue = 0;
+         $('.items-builder-list .item-list[field_percentattackspeedmod]').each(function() {
+             flatItemsValue = flatItemsValue + parseFloat($(this).attr('field_percentattackspeedmod'));
+         })
+         var totalValue = base * (1 + (flatItemsValue / 100));
+         flatItemsValue = totalValue - base;
+         return {
+             flatItemsValue: flatItemsValue,
+             totalValue: totalValue
+         }
+     }
+     // function setBarCharts(championStatsBase) {
+     //     var maxStatsValue = getMaxStatsValue();
+     //     console.log(championStatsBase);
+     //     for (var i = championStatsBase.length - 1; i >= 0; i--) {
+     //         if(typeof maxStatsValue[championStatsBase[i].name] !== 'undefined'){
+     //            var maxValue = maxStatsValue[championStatsBase[i].name];
+     //             var currentValue = parseFloat(championStatsBase[i].value);
+     //            if(championStatsBase[i].name=='data-base-attackspeedoffset'){
+     //                championStatsBase[i].label = 'Attack per second';
+     //            }
+     //            var currentValuePercent = Math.round(currentValue*100/maxValue);
+     //            if(currentValue < 10){
+     //                if(championStatsBase[i].name=='data-base-attackspeedoffset'){
+     //                    currentValue = Math.round(currentValue*1000)/1000;
+     //                }else{
+     //                    currentValue = Math.round(currentValue*100)/100;
+     //                }
+     //            }else{
+     //                currentValue = Math.round(currentValue);
+     //            }
+     //            var barChart = '<div class="champion-bar-chart"><div class="champion-bar-chart-wrapper"><div class="champion-bar-chart-total"  style="height:'+currentValuePercent+'%"><div class="champion-bar-chart-base" style="height:100%"><span>'+currentValue+'</span></div></div></div><div class="champion-bar-chart-value">'+currentValue+'</div><div class="champion-bar-chart-label">'+championStatsBase[i].label+'</div></div>';
+     //            $('.chosen-champion .chosen-champion-tpl .champion-bar-charts').append(barChart);
+     //         }             
+     //     };
+     //     setTimeout(function(){ 
+     //        $('.champion-bar-charts').addClass('ready');
+     //    }, 200);         
+     // }
+     function updateBarCharts() {
+         championLevel = parseInt($('.levelSelector').val());
+         var maxStatsValue = getMaxStatsValue();
+         var championAttributes = $('.chosen-champion .chosen-champion-tpl')[0].attributes;
+         $('.champion-bar-charts').removeClass('ready');
+         $('.champion-bar-chart').remove();
+         for (var i = championAttributes.length - 1; i >= 0; i--) {
+             var attributeName = championAttributes[i]['name'];
+             var attributeValue = championAttributes[i]['value'];
+             var attributeLabel = championsStats[attributeName];
+             if (typeof maxStatsValue[attributeName] !== 'undefined') {
+                 var maxValue = maxStatsValue[attributeName];
+                 var currentValue = parseFloat(attributeValue);
+                 if (typeof $('.chosen-champion .chosen-champion-tpl').attr(attributeName + 'perlevel') !== 'undefined') {
+                     var valuePerLevel = parseFloat($('.chosen-champion .chosen-champion-tpl').attr(attributeName + 'perlevel'));
+                     for (var level = championLevel - 2; level >= 0; level--) {
+                         currentValue = currentValue + valuePerLevel;
+                     };
+                 }
+                 if (attributeName == 'data-base-attackspeedoffset') {
+                     attributeLabel = 'Attack per second';
+                 }
+                 
+                 if (currentValue < 10) {
+                     if (attributeName == 'data-base-attackspeedoffset') {
+                         currentValue = Math.round(currentValue * 1000) / 1000;
+                     } else {
+                         currentValue = Math.round(currentValue * 100) / 100;
+                     }
+                 } else {
+                     currentValue = Math.round(currentValue);
+                 }
+                 switch (attributeName) {
+                     case 'data-base-attackspeedoffset':
+                         var totalStats = getChampionAttackSpeed(currentValue);
+                         break;
+                     default:
+                         var totalStats = getChampionStat(currentValue, getItemToChampionStat(attributeName) );
+                         break;
+                 }
+                 var totalItemsValue = totalStats.flatItemsValue;
+                 var totalValue = totalStats.totalValue;
+                 var currentValuePercent = Math.round(totalValue * 100 / maxValue);
+                 var itemsPercent = Math.round(totalItemsValue * 100 / totalValue);
+                 var basePercent = 100 - itemsPercent;
+                 var chartItems = '<div class="champion-bar-chart-items" style="height:'+itemsPercent+'%; bottom: '+basePercent+'%;"><span>' + totalItemsValue + '</span></div>';
+                 var chartBase = '<div class="champion-bar-chart-base" style="height:'+basePercent+'%"><span>' + currentValue + '</span></div>';
+                 var barChart = '<div class="champion-bar-chart"><div class="champion-bar-chart-wrapper"><div class="champion-bar-chart-total"  style="height:' + currentValuePercent + '%">' + chartItems + chartBase + '</div></div><div class="champion-bar-chart-value">' + totalValue + '</div><div class="champion-bar-chart-label">' + attributeLabel + '</div></div>';
+                 $('.chosen-champion .chosen-champion-tpl .champion-bar-charts').append(barChart);
+             }
+         };
+         setTimeout(function() {
+             $('.champion-bar-charts').addClass('ready');
+         }, 200);
+     }
+     $('.chosen-champion').on('change', '.levelSelector', function() {
+         updateBarCharts();
+     })
 
      function changeChampion($champion) {
          if ($('.chosen-champion .chosen-champion-tpl').length > 0) {
@@ -108,18 +210,19 @@
              var attributeValue = championAttributes[i]['value'];
              var attributeLabel = championsStats[attributeName];
              if (attributeName.indexOf('base') > -1) {
-                if(attributeName=='data-base-attackspeedoffset'){
-                    attributeValue = 0.625/( parseFloat(attributeValue)+1);
-                    attributeValue =  Math.round(attributeValue*1000)/1000;
-                    attributeLabel = 'Attack per second';
-                }
+                 if (attributeName == 'data-base-attackspeedoffset') {
+                     attributeValue = 0.625 / (parseFloat(attributeValue) + 1);
+                     attributeValue = Math.round(attributeValue * 1000) / 1000;
+                     attributeLabel = 'Attack per second';
+                 }
                  var stat = '<li class="column stat-' + attributeName + '"><strong>' + attributeLabel + ': </strong><span>' + attributeValue + '</span></li>';
                  $chosenTpl.find('.chosen-champion-stats').append(stat);
                  championStatsBase[j] = {
-                     name : attributeName,
+                     name: attributeName,
                      value: attributeValue,
                      label: attributeLabel
                  };
+                 $chosenTpl.attr(attributeName, attributeValue);
                  j++;
              } else {
                  if (attributeName.indexOf('infos') > -1) {
@@ -128,7 +231,7 @@
              }
          };
          $(".chosen-champion").append($chosenTpl);
-         setBarCharts(championStatsBase);
+         updateBarCharts();
          initChart(championInfos);
      }
 
@@ -158,6 +261,7 @@
          if ($('.items-builder-list .item-list').length < 6) {
              $item.addClass('selected-item');
              $('.items-builder-list').append($item.clone().removeClass('selected-item'));
+            updateBarCharts();
          }
      }
 
@@ -166,6 +270,7 @@
          $item.remove();
          if ($('.items-builder-list .item-list[data-name="' + itemName + '"]').length == 0) {
              $('.list-items .item-list[data-name="' + itemName + '"]').removeClass('selected-item');
+            updateBarCharts();
          }
      }
 
